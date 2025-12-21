@@ -1,10 +1,10 @@
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name = "roland-vpc"
+    Name = var.vpc_name
   }
 }
 
@@ -12,19 +12,18 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "roland-igw"
+    Name = var.igw_name
   }
 }
 
-
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
+  cidr_block              = var.subnet_cidr
+  availability_zone       = var.availability_zone
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "roland-public-subnet2"
+    Name = "${var.vpc_name}-public-subnet"
   }
 }
 
@@ -37,11 +36,6 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "roland-public-rt"
+    Name = var.route_table_name
   }
-}
-
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
 }
