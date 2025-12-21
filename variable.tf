@@ -16,7 +16,7 @@ variable "subnet_cidr" {
 variable "availability_zone" {
   description = "Availability Zone for the subnet"
   type        = string
-  
+
 }
 
 variable "igw_name" {
